@@ -21,11 +21,12 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  dio: ^3.0.9
-  provider: ^4.1.2
-  fluttertoast: ^4.0.1
-  shared_preferences: ^0.5.7+2
-  cached_network_image: ^2.2.0+1
+  dio: ^3.0.9 # 网络请求
+  provider: ^4.1.2 # 状态管理
+  translator: ^0.1.4 # 翻译
+  fluttertoast: ^4.0.1 # toast
+  shared_preferences: ^0.5.7+2 # 数据持久化
+  cached_network_image: ^2.2.0+1 # 图片缓存
 
   flutter:
     sdk: flutter

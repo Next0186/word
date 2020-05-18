@@ -18,8 +18,7 @@ class ApiClient {
   // Map get townIdAndBlockType => Store.getValue<TownStore>().townIdAndBlockType;
   // Map get townIdAndPublishType => Store.getValue<TownStore>().townIdAndPublishType;
 
-  Future request(path,
-      [dynamic params, Options options, ApiClientConfig config]) async {
+  Future request(path, [dynamic params, Options options, ApiClientConfig config]) async {
     Response res;
     if (config == null) config = ApiClientConfig();
     final _options = options ?? Options();

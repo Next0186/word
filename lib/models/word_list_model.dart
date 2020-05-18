@@ -63,6 +63,7 @@ class Words {
   int id;
   List<String> translate;
   List<String> similar;
+  Sign sign;
   int frequency;
   int difficultRank;
   String word;
@@ -75,6 +76,7 @@ class Words {
       {this.id,
       this.translate,
       this.similar,
+      this.sign,
       this.frequency,
       this.difficultRank,
       this.word,
@@ -87,6 +89,7 @@ class Words {
     id = json['id'];
     translate = json['translate'].cast<String>();
     similar = json['similar'].cast<String>();
+    sign = json['sign'] != null ? new Sign.fromJson(json['sign']) : null;
     frequency = json['frequency'];
     difficultRank = json['difficultRank'];
     word = json['word'];
@@ -101,6 +104,9 @@ class Words {
     data['id'] = this.id;
     data['translate'] = this.translate;
     data['similar'] = this.similar;
+    if (this.sign != null) {
+      data['sign'] = this.sign.toJson();
+    }
     data['frequency'] = this.frequency;
     data['difficultRank'] = this.difficultRank;
     data['word'] = this.word;
@@ -108,6 +114,25 @@ class Words {
     data['etymology'] = this.etymology;
     data['origin'] = this.origin;
     data['avatar'] = this.avatar;
+    return data;
+  }
+}
+
+class Sign {
+  String en;
+  String us;
+
+  Sign({this.en, this.us});
+
+  Sign.fromJson(Map<String, dynamic> json) {
+    en = json['en'];
+    us = json['us'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['en'] = this.en;
+    data['us'] = this.us;
     return data;
   }
 }

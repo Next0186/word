@@ -343,6 +343,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.15"
+  translator:
+    dependency: "direct main"
+    description:
+      name: translator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4"
   typed_data:
     dependency: transitive
     description:

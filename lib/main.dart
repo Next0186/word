@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:word/common/nav_key.dart';
+import 'package:word/router/routes.dart';
 import 'package:word/store/provider.dart';
 import 'package:word/views/home.dart';
 
@@ -26,12 +27,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Store.init(
       child: MaterialApp(
+        initialRoute: 'index',
         navigatorKey: NavKey.navKey,
+        onGenerateRoute: routeGenerator,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage()
+        // home: HomePage()
       )
     );
   }

@@ -14,6 +14,52 @@
             "crowd",
             "horde"
           ],
+          "sign": {
+            "en": "həʊst",
+            "us": "hoʊst"
+          },
+          "frequency": 1,
+          "difficultRank": 1,
+          "word": "host",
+          "disable": false,
+          "etymology": "XXX XXX XXX",
+          "origin": "google news",
+          "avatar": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg"
+        },{
+          "id": 0,
+          "translate": [
+            "主办",
+            "作东"
+          ],
+          "similar": [
+            "crowd",
+            "horde"
+          ],
+          "sign": {
+            "en": "həʊst",
+            "us": "hoʊst"
+          },
+          "frequency": 1,
+          "difficultRank": 1,
+          "word": "host",
+          "disable": false,
+          "etymology": "XXX XXX XXX",
+          "origin": "google news",
+          "avatar": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg"
+        },{
+          "id": 0,
+          "translate": [
+            "主办",
+            "作东"
+          ],
+          "similar": [
+            "crowd",
+            "horde"
+          ],
+          "sign": {
+            "en": "həʊst",
+            "us": "hoʊst"
+          },
           "frequency": 1,
           "difficultRank": 1,
           "word": "host",
@@ -24,7 +70,7 @@
         }],
         "translate": "MSNBC主持人在拒绝参与案子后未能向拜登询问弗林揭幕请求",
         "avatar": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg",
-        "wordList": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
+        "sentence": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
       },
       {
         "words": [{
@@ -37,8 +83,12 @@
             "crowd",
             "horde"
           ],
+          "sign": {
+            "en": "həʊst",
+            "us": "hoʊst"
+          },
           "frequency": 1,
-          "difficultRank": 2,
+          "difficultRank": 1,
           "word": "host",
           "disable": false,
           "etymology": "XXX XXX XXX",
@@ -47,7 +97,7 @@
         }],
         "translate": "MSNBC主持人在拒绝参与案子后未能向拜登询问弗林揭幕请求",
         "avatar": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg",
-        "wordList": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
+        "sentence": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
       },
       {
         "words": [{
@@ -60,8 +110,12 @@
             "crowd",
             "horde"
           ],
+          "sign": {
+            "en": "həʊst",
+            "us": "hoʊst"
+          },
           "frequency": 1,
-          "difficultRank": 3,
+          "difficultRank": 1,
           "word": "host",
           "disable": false,
           "etymology": "XXX XXX XXX",
@@ -70,7 +124,7 @@
         }],
         "translate": "MSNBC主持人在拒绝参与案子后未能向拜登询问弗林揭幕请求",
         "avatar": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2841648446,236398816&fm=26&gp=0.jpg",
-        "wordList": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
+        "sentence": "MSNBC host fails to ask Biden about Flynn unmasking request after he denied any involvement in case"
       }
     ]
   }
