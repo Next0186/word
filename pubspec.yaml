@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   dio: ^3.0.9 # 网络请求
+  ffloat: ^1.0.1 # 飞猪UI
   provider: ^4.1.2 # 状态管理
   translator: ^0.1.4 # 翻译
   fluttertoast: ^4.0.1 # toast
