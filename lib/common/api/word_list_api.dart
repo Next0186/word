@@ -5,7 +5,12 @@ class WordListApi extends ApiClient {
   
   /// 获取单词列表
   Future getWordList() {
-    return request('/wordList');
+    return request('http://yapi.maxrocky.com/mock/47/word/wordList');
+  }
+  
+  /// 查找单个单词
+  Future findWord(String word) {
+    return request('/auth/translate?word=$word');
   }
 }
 

@@ -45,7 +45,7 @@ class ApiClient {
 
     var data = res.data;
     if (data is String) data = json.decode(data);
-    final String code = data['code'];
+    final String code = data['code'].toString();
     if (code == 'AUTH_0037') {
       // TokenInfo.resetUserInfo();
       Fluttertoast.showToast(msg: data['msg'] ?? '用户系统异常', gravity: ToastGravity.BOTTOM);
