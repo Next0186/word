@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:word/common/nav_key.dart';
 import 'package:word/router/routes.dart';
 import 'package:word/store/provider.dart';
-import 'package:word/views/home.dart';
+// import 'package:word/views/home.dart';
 
 void main() {
 
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Store.init(
       child: MaterialApp(
-        initialRoute: 'index',
+        initialRoute: 'login',
         navigatorKey: NavKey.navKey,
         onGenerateRoute: routeGenerator,
         theme: ThemeData(

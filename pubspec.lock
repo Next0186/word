@@ -92,13 +92,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.9"
-  ffloat:
+  fbutton:
     dependency: "direct main"
     description:
-      name: ffloat
+      name: fbutton
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.4"
   file:
     dependency: transitive
     description:

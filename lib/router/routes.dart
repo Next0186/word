@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:word/models/word_list_model.dart';
 import 'package:word/views/home.dart';
+import 'package:flutter/material.dart';
+import 'package:word/views/login.dart';
 import 'package:word/views/word_detail.dart';
+import 'package:word/models/word_list_model.dart';
 
 final Map<String, WidgetBuilder> routesConfig = {
   /// 首页
@@ -13,6 +14,9 @@ final Map<String, WidgetBuilder> routesConfig = {
     Words detail = ModalRoute.of(context).settings.arguments;
     return WordDetail(item: detail);
   },
+
+  /// 单词详情
+  'login': (context) => Login(),
 
   // // 注册
   // 'register': (context) {
