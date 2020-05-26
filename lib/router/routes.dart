@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:word/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:word/views/login.dart';
+import 'package:word/views/signup.dart';
 import 'package:word/views/word_detail.dart';
 import 'package:word/models/word_list_model.dart';
 
@@ -15,8 +16,11 @@ final Map<String, WidgetBuilder> routesConfig = {
     return WordDetail(item: detail);
   },
 
-  /// 单词详情
+  /// 登录
   'login': (context) => Login(),
+
+  /// 注册
+  'signup': (context) => Signup(),
 
   // // 注册
   // 'register': (context) {

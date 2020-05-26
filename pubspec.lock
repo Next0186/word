@@ -135,6 +135,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.1"
+  fsuper:
+    dependency: "direct main"
+    description:
+      name: fsuper
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.5"
   http:
     dependency: transitive
     description:

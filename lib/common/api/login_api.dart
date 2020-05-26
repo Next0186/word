@@ -4,8 +4,8 @@ import 'package:word/common/api/client.dart';
 class LoginApi extends ApiClient {
 
   /// 登录
-  Future login(String mobile, String password) {
-    return request('https://www.room-li.com:8080/api/login', { mobile, password });
+  Future login(String userName, String password) {
+    return request('https://www.room-li.com:8080/api/login', { 'userName': userName, 'password': password });
   }
 }
 
