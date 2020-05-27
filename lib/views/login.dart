@@ -4,6 +4,8 @@ import 'package:fsuper/fsuper.dart';
 import 'package:word/common/api/user_api.dart';
 //import 'package:word/components/layout/user_phone.dart';
 import 'package:word/components/word.dart';
+import 'package:word/store/module/user_info_store.dart';
+import 'package:word/store/provider.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -23,7 +25,9 @@ class _LoginState extends State<Login> {
       final password = _password.text;
       if (userName.isEmpty) Fluttertoast.showToast(msg: null);
       final res = await userApi.login(userName, password);
-      print(['object', res]);
+      Store.value<UserInfoStore>(context).setUserInfo(res['data']);
+      Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => route == null);
+      Fluttertoast.showToast(msg: '登录成功');
     } catch (e) {
       print(e);
     }

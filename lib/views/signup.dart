@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:word/common/api/user_api.dart';
 import 'package:word/components/word.dart';
+import 'package:word/store/module/user_info_store.dart';
+import 'package:word/store/provider.dart';
 
 class Signup extends StatefulWidget {
   Signup({Key key}) : super(key: key);
@@ -76,10 +78,11 @@ class _SignupState extends State<Signup> {
     var email = _email.text;
     try {
       var userInfo =  await userApi.signup(userName: userName, code: code, password: password, email: email);
-      // Fluttertoast.showToast(msg: 'null')
-      print(['object', userInfo]);
+      Store.value<UserInfoStore>(context).setUserInfo(userInfo['data']);
+      Fluttertoast.showToast(msg: '注册成功');
+      Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => route == null);
     } catch (e) {
-      // Fluttertoast.showToast(msg: '登录失败');
+      print(['注册失败', e]);
     }
   }
 

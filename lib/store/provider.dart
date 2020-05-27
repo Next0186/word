@@ -19,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:town/store/module/my_publish_store.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:word/common/nav_key.dart';
+import 'package:word/store/module/user_info_store.dart';
 import 'package:word/store/module/word_list_store.dart';
 
 class Store {
@@ -27,6 +28,7 @@ class Store {
   static init({Widget child, SharedPreferences prefs}) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => UserInfoStore()),
         ChangeNotifierProvider(create: (_) => WordListStore()),
         // ChangeNotifierProvider(create: (_) => NewsStore()),
         // ChangeNotifierProvider(create: (_) => UserStore()),

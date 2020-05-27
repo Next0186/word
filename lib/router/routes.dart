@@ -9,7 +9,7 @@ import 'package:word/models/word_list_model.dart';
 
 final Map<String, WidgetBuilder> routesConfig = {
   /// 首页
-  'index': (context) => HomePage(),
+  'home': (context) => HomePage(),
 
   /// 单词详情
   'wordDetail': (context) {
