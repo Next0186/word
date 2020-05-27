@@ -1,7 +1,7 @@
 import 'package:fbutton/fbutton.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fsuper/fsuper.dart';
-import 'package:word/common/api/login_api.dart';
+import 'package:word/common/api/user_api.dart';
 //import 'package:word/components/layout/user_phone.dart';
 import 'package:word/components/word.dart';
 
@@ -13,22 +13,39 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController userName = TextEditingController();
-  TextEditingController password = TextEditingController();
+  bool canLogin = false;
+  TextEditingController _userName = TextEditingController();
+  TextEditingController _password = TextEditingController();
 
-//  _checkState() {}
   _submit() async {
     try {
-      final res = await wordListApi.login(userName.text, password.text);
+      final userName = _userName.text;
+      final password = _password.text;
+      if (userName.isEmpty) Fluttertoast.showToast(msg: null);
+      final res = await userApi.login(userName, password);
       print(['object', res]);
     } catch (e) {
       print(e);
     }
   }
 
+  onChanged(String text) {
+    final userName = _userName.text;
+    final password = _password.text;
+    setState(() {
+      canLogin = userName.isNotEmpty && password.isNotEmpty;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black87),
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -37,22 +54,24 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 80),
-                child: TextView('Welcome to login', size: 20, weight: FontWeight.w500,),
+                padding: EdgeInsets.only(top: 40, bottom: 20),
+                child: TextView('Welcome to Magneto', size: 20, weight: FontWeight.w500, textAlign: TextAlign.center,),
               ),
               TextField(
-                controller: userName,
                 maxLength: 11,
+                onChanged: onChanged,
+                controller: _userName,
                 style: TextStyle(fontSize: 16),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     counterText: '',
-                    labelText: 'phone'
+                    labelText: 'name or email'
                 )
               ),
               TextField(
-                  controller: password,
                   obscureText: true,
+                  onChanged: onChanged,
+                  controller: _password,
                   style: TextStyle(fontSize: 16),
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
@@ -65,27 +84,34 @@ class _LoginState extends State<Login> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    FSuper(
-                      text: '忘记密码？',
-                      textColor: Color(0xffc2bfc2),
-                      padding: EdgeInsets.all(2),
-                      corner: Corner.all(3),
-                      strokeColor: Color(0xffc2bfc2),
-                      strokeWidth: 1,
-                      onClick: () {
-                        Fluttertoast.showToast(msg: '功能开发中...');
-                      },
+                    Hero(
+                      tag: 'title', 
+                      child: FSuper(
+                        text: '找回密码',
+                        textColor: Color(0xffc2bfc2),
+                        padding: EdgeInsets.all(2),
+                        corner: Corner.all(3),
+                        strokeColor: Color(0xffc2bfc2),
+                        strokeWidth: 1,
+                        onClick: () {
+                          Navigator.pushNamed(context, 'retrieve', arguments: '找回密码');
+                          // Fluttertoast.showToast(msg: '功能开发中...');
+                        },
+                      ),
                     ),
-                    FSuper(
-                      text: '立刻注册',
-                      textColor: Color(0xff0ecc88),
-                      padding: EdgeInsets.all(2),
-                      corner: Corner.all(3),
-                      strokeColor: Color(0xff0ecc88),
-                      strokeWidth: 1,
-                      onClick: () {
-                        Navigator.pushNamed(context, 'signup');
-                      }
+                    Hero(
+                      tag: 'signup',
+                      child: FSuper(
+                        text: '用户注册',
+                        textColor: Color(0xff0ecc88),
+                        padding: EdgeInsets.all(2),
+                        corner: Corner.all(3),
+                        strokeColor: Color(0xff0ecc88),
+                        strokeWidth: 1,
+                        onClick: () {
+                          Navigator.pushNamed(context, 'signup');
+                        }
+                      ),
                     ),
                   ],
                 ),
@@ -96,8 +122,9 @@ class _LoginState extends State<Login> {
                 text: "Try This!",
                 textColor: Colors.white,
                 color: Color(0xffffc900),
-                onPressed: _submit,
+                onPressed: canLogin ? _submit : null,
                 clickEffect: true,
+                disabledColor: Color(0x66ffc900),
                 corner: FButtonCorner.all(9),
                 splashColor: Color(0xffff7043),
                 highlightColor: Color(0xffE65100).withOpacity(0.20),
