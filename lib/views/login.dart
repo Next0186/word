@@ -1,11 +1,9 @@
 import 'package:fbutton/fbutton.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:fsuper/fsuper.dart';
-import 'package:word/common/api/user_api.dart';
-//import 'package:word/components/layout/user_phone.dart';
-import 'package:word/components/word.dart';
-import 'package:word/store/module/user_info_store.dart';
 import 'package:word/store/provider.dart';
+import 'package:word/components/word.dart';
+import 'package:word/common/api/user_api.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:word/store/module/user_info_store.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -26,7 +24,7 @@ class _LoginState extends State<Login> {
       if (userName.isEmpty) Fluttertoast.showToast(msg: null);
       final res = await userApi.login(userName, password);
       Store.value<UserInfoStore>(context).setUserInfo(res['data']);
-      Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => route == null);
+      Navigator.of(context).pushNamedAndRemoveUntil('homePage', (route) => route == null);
       Fluttertoast.showToast(msg: '登录成功');
     } catch (e) {
       print(e);
@@ -40,6 +38,20 @@ class _LoginState extends State<Login> {
       canLogin = userName.isNotEmpty && password.isNotEmpty;
     });
   }
+
+  Widget _flightShuttleBuilder(
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+  ) {
+    return DefaultTextStyle(
+      style: DefaultTextStyle.of(toHeroContext).style,
+      child: toHeroContext.widget,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -89,34 +101,36 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Hero(
-                      tag: 'title', 
-                      child: FSuper(
-                        text: '找回密码',
-                        textColor: Color(0xffc2bfc2),
-                        padding: EdgeInsets.all(2),
-                        corner: Corner.all(3),
-                        strokeColor: Color(0xffc2bfc2),
-                        strokeWidth: 1,
-                        onClick: () {
+                      tag: 'title',
+                      flightShuttleBuilder: _flightShuttleBuilder,
+                      child: TextView(
+                        '找回密码',
+                        textAlign: TextAlign.center,
+                        // color: Color(0xff0ecc88),
+                        onTap: () {
                           Navigator.pushNamed(context, 'retrieve', arguments: '找回密码');
-                          // Fluttertoast.showToast(msg: '功能开发中...');
                         },
-                      ),
+                      )
                     ),
                     Hero(
                       tag: 'signup',
-                      child: FSuper(
-                        text: '用户注册',
-                        textColor: Color(0xff0ecc88),
-                        padding: EdgeInsets.all(2),
-                        corner: Corner.all(3),
-                        strokeColor: Color(0xff0ecc88),
-                        strokeWidth: 1,
-                        onClick: () {
+                      flightShuttleBuilder: _flightShuttleBuilder,
+                      child: TextView(
+                        '用户注册',
+                        textAlign: TextAlign.center,
+                        onTap: () {
                           Navigator.pushNamed(context, 'signup');
-                        }
-                      ),
-                    ),
+                        },
+                      )
+                    )
+                    // View(
+                    //   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(4),
+                    //     // border: Border.all(width: 0.5, color: Color(0xff0ecc88))
+                    //   ),
+                    //   child: ,
+                    // ),
                   ],
                 ),
               ),

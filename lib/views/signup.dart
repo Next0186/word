@@ -80,7 +80,7 @@ class _SignupState extends State<Signup> {
       var userInfo =  await userApi.signup(userName: userName, code: code, password: password, email: email);
       Store.value<UserInfoStore>(context).setUserInfo(userInfo['data']);
       Fluttertoast.showToast(msg: '注册成功');
-      Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => route == null);
+      Navigator.of(context).pushNamedAndRemoveUntil('homePage', (route) => route == null);
     } catch (e) {
       print(['注册失败', e]);
     }

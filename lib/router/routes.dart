@@ -1,20 +1,22 @@
 import 'package:flutter/widgets.dart';
 import 'package:word/views/home.dart';
 import 'package:flutter/material.dart';
+import 'package:word/views/home_page.dart';
 import 'package:word/views/login.dart';
 import 'package:word/views/retrieve.dart';
 import 'package:word/views/signup.dart';
 import 'package:word/views/word_detail.dart';
-import 'package:word/models/word_list_model.dart';
 
 final Map<String, WidgetBuilder> routesConfig = {
+  'homePage': (context) => HomePage(),
+
   /// 首页
-  'home': (context) => HomePage(),
+  'home': (context) => Home(),
 
   /// 单词详情
   'wordDetail': (context) {
-    Words detail = ModalRoute.of(context).settings.arguments;
-    return WordDetail(item: detail);
+    String word = ModalRoute.of(context).settings.arguments;
+    return WordDetail(word);
   },
 
   /// 登录
