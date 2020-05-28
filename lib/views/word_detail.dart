@@ -30,7 +30,6 @@ class _WordDetailState extends State<WordDetail> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // translate();
     getWord();
   }
 

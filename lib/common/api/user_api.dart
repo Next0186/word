@@ -1,5 +1,6 @@
 // import 'package:dio/dio.dart';
 // import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:word/common/api/client.dart';
 
 class UserApi extends ApiClient {
@@ -23,6 +24,13 @@ class UserApi extends ApiClient {
   Future findPassword(String email, String password, String code) {
     return request('/api/find/password', { 'email': email, 'password': password, 'code': code  });
   }
+
+  /// 刷新token
+  Future refreshToken(String rfToken) {
+    return request('/api/refresh/token', null, Options(headers: { 'refresh-token': rfToken }, method: 'POST'));
+  }
 }
+// http://192.168.88.107:7001/api/ refresh /token
+// http://192.168.88.107:7001​/api​/ refresh​ /token
 
 final userApi = UserApi();

@@ -1,4 +1,5 @@
 import 'package:word/common/icon.dart';
+import 'package:word/common/nav_key.dart';
 import 'package:word/store/provider.dart';
 import 'package:word/components/word.dart';
 import 'package:word/components/layout/color.dart';
@@ -75,7 +76,13 @@ class _HomeState extends State<Home> {
     // final word = cont
     text = text.trim();
     if (text.isEmpty) return;
-    Navigator.pushNamed(context, 'wordDetail', arguments: text);
+    // Navigator.popAndPushNamed(NavKey.navKey.currentContext, 'routeName');
+    NavKey.navKey.currentState.pushNamed('wordDetail', arguments: text);
+    // try {
+    //   Navigator.pushNamed(NavKey.navKey.currentContext, 'wordDetail', arguments: text);
+    // } catch (e) {
+    //   print(['object', e]);
+    // }
     // try {
     //   var res = await wordApi.getWord('hello');
     //   print(['object', json.encode(res)]);

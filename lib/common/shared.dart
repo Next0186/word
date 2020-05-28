@@ -33,4 +33,9 @@ class Shared {
     var prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }
+
+  static Future<void> removeItem(String key) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.remove(key); // .getString(key);
+  }
 }
