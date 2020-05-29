@@ -2,11 +2,13 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:translator/translator.dart';
 import 'package:word/common/api/word_api.dart';
+import 'package:word/common/icon.dart';
 import 'package:word/components/layout/color.dart';
 import 'package:word/components/layout/height_bar.dart';
 // import 'package:word/common/api/word_list_api.dart';
 import 'package:word/components/layout/image_build.dart';
 import 'package:word/components/word.dart';
+import 'package:word/models/word_desc_model.dart';
 // import 'package:word/models/word_detail_model.dart';
 import 'package:word/models/word_model.dart';
 
@@ -20,6 +22,7 @@ class WordDetail extends StatefulWidget {
 
 class _WordDetailState extends State<WordDetail> {
   WordModel word;
+  WordDescModel wordDesc;
   final translator = GoogleTranslator();
   // WordDetailModel detail ;
   AudioPlayer audioPlayer = AudioPlayer();
@@ -35,11 +38,16 @@ class _WordDetailState extends State<WordDetail> {
 
   getWord() async {
     try {
-      var res = await wordApi.getWord(widget.word);
+      var _word = widget.word;
+      var wordDetail = wordApi.getWord(_word);
+      var wordDescR = wordApi.getWordDesc(_word); // .getWord(widget.word);
+      var data = await Future.wait([wordDetail, wordDescR]);
       setState(() {
-        word = WordModel.fromJson(res['data']);
+        word = WordModel.fromJson(data[0]['data']);
+        wordDesc = WordDescModel.fromJson(data[1]['data']);
       });
     } catch (e) {
+      print(['object111111111111', e]);
     }
   }
 
@@ -138,41 +146,119 @@ class _WordDetailState extends State<WordDetail> {
     );
   }
 
-  // 词源
-  Widget _buildOrigin() {
+  Widget _buidlWrapper(String title, Widget content) {
     return Padding(
       padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextView('词源：', size: 18, weight: FontWeight.w500,),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: word.origins.map((e) => Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextView(e.title, size: 18, margin: EdgeInsets.only(top: 8, bottom: 2),),
-                TextView(e.origin, size: 16, ),
-              ]
-            )).toList()
-          )
-        ],
+        children: [
+          TextView(title, size: 18, weight: FontWeight.w500,),
+          content
+          // Padding(
+          //   padding: EdgeInsets.symmetric(vertical: 10),
+          //   child: content,
+          // )
+        ]
       ),
     );
   }
 
-  Widget _buildExample() {
-    return Padding(
-      padding: padding,
-      child: Column(
+  // 词源
+  Widget _buildOrigin() {
+    return _buidlWrapper('词源：', Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: word.origins.map((e) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextView('例句：', size: 18, weight: FontWeight.w500,),
-          TextView(word.example.en, size: 16, margin: EdgeInsets.symmetric(vertical: 4),),
-          TextView(word.example.zh, size: 16,)
-        ],
-      ),
-    );
+        children: [
+          TextView(e.title, size: 18, margin: EdgeInsets.only(top: 8, bottom: 2), color: Colors.black54,),
+          View(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: MyColor.backgroundColor
+            ),
+            child: TextView(e.origin, size: 16, color: Colors.black45,),
+          )
+        ]
+      )).toList()
+    ));
+  }
+
+  Widget _buildExample() {
+    return _buidlWrapper('例句：', Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextView(word.example.en, size: 16, margin: EdgeInsets.symmetric(vertical: 6), color: Colors.black45,),
+        TextView(word.example.zh, size: 16, color: Colors.black45,)
+      ]
+    ));
+  }
+
+  Widget _buildMyWordLog() {
+    return _buidlWrapper('我的单词笔记：', Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: wordDesc != null ? <Widget>[
+        View(
+          margin: EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: MyColor.backgroundColor
+          ),
+          child: TextView(wordDesc.myDesc.desc, size: 16, color: Colors.black45,)
+        )
+      ] : [],
+    ));
+  }
+
+  Widget _buildCommonDesc() {
+    return _buidlWrapper('大家的单词笔记', Column(
+      children: wordDesc.dataList.map((item) => Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildDescTitle(item),
+            View(
+              margin: EdgeInsets.only(top: 12),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: MyColor.backgroundColor
+              ),
+              child: TextView(item.desc, size: 16, ),
+            )
+          ]
+        )
+      )).toList()
+    ));
+  }
+
+  Widget _buildDescTitle(DataList item) {
+    return Row(
+      children: <Widget>[
+        ImageBuild(
+          url: item.avatar,
+          width: 56,
+          height: 56,
+          borderRadius: BorderRadius.circular(4)
+        ),
+        Expanded(
+          child: View(
+            height: 56,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextView(item.userName, size: 18, color: Colors.black54,),
+                TextView(item.updateAt, color: Colors.black38,)
+              ]
+            ),
+          ),
+        ),
+        IconView(IconFont.praise, size: 18, color: Colors.black26,)
+      ],);
   }
 
   @override
@@ -196,7 +282,11 @@ class _WordDetailState extends State<WordDetail> {
              HegihtBar(),
              _buildOrigin(),
              HegihtBar(),
-             _buildExample()
+             _buildExample(),
+             HegihtBar(),
+             _buildMyWordLog(),
+             HegihtBar(),
+             _buildCommonDesc()
             // TextView(word.translate)
           ]
         ) : View(
