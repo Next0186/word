@@ -12,6 +12,7 @@ class WordModel {
   String rank;
   Example example;
   String createdAt;
+  List<WordDesc> wordDesc;
 
   WordModel(
       {this.translate,
@@ -26,7 +27,8 @@ class WordModel {
       this.originEn,
       this.rank,
       this.example,
-      this.createdAt});
+      this.createdAt,
+      this.wordDesc});
 
   WordModel.fromJson(Map<String, dynamic> json) {
     translate = json['translate'].cast<String>();
@@ -55,6 +57,12 @@ class WordModel {
     example =
         json['example'] != null ? new Example.fromJson(json['example']) : null;
     createdAt = json['createdAt'];
+    if (json['wordDesc'] != null) {
+      wordDesc = new List<WordDesc>();
+      json['wordDesc'].forEach((v) {
+        wordDesc.add(new WordDesc.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +88,9 @@ class WordModel {
       data['example'] = this.example.toJson();
     }
     data['createdAt'] = this.createdAt;
+    if (this.wordDesc != null) {
+      data['wordDesc'] = this.wordDesc.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -162,6 +173,28 @@ class Example {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['en'] = this.en;
     data['zh'] = this.zh;
+    return data;
+  }
+}
+
+class WordDesc {
+  String sId;
+  String desc;
+  String updateAt;
+
+  WordDesc({this.sId, this.desc, this.updateAt});
+
+  WordDesc.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    desc = json['desc'];
+    updateAt = json['updateAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['desc'] = this.desc;
+    data['updateAt'] = this.updateAt;
     return data;
   }
 }

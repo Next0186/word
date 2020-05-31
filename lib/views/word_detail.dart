@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:translator/translator.dart';
@@ -39,12 +41,9 @@ class _WordDetailState extends State<WordDetail> {
   getWord() async {
     try {
       var _word = widget.word;
-      var wordDetail = wordApi.getWord(_word);
-      var wordDescR = wordApi.getWordDesc(_word); // .getWord(widget.word);
-      var data = await Future.wait([wordDetail, wordDescR]);
+      var data = await wordApi.getWord(_word);
       setState(() {
-        word = WordModel.fromJson(data[0]['data']);
-        wordDesc = WordDescModel.fromJson(data[1]['data']);
+        word = WordModel.fromJson(data['data']);
       });
     } catch (e) {
       print(['object111111111111', e]);
@@ -195,71 +194,81 @@ class _WordDetailState extends State<WordDetail> {
   }
 
   Widget _buildMyWordLog() {
+    var desc = word?.wordDesc;
     return _buidlWrapper('我的单词笔记：', Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: wordDesc != null ? <Widget>[
-        View(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: MyColor.backgroundColor
-          ),
-          child: TextView(wordDesc.myDesc.desc, size: 16, color: Colors.black45,)
-        )
-      ] : [],
+      children: desc != null ? desc.map((item) => View(
+        margin: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: MyColor.backgroundColor
+        ),
+        child: TextView(item.desc, size: 16, color: Colors.black45,)
+      )).toList() : []
+      // <Widget>[
+      //   View(
+      //     margin: EdgeInsets.symmetric(vertical: 8),
+      //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      //     decoration: BoxDecoration(
+      //       borderRadius: BorderRadius.circular(4),
+      //       color: MyColor.backgroundColor
+      //     ),
+      //     child: TextView(wordDesc.myDesc.desc, size: 16, color: Colors.black45,)
+      //   )
+      // ] : [],
     ));
   }
 
-  Widget _buildCommonDesc() {
-    return _buidlWrapper('大家的单词笔记', Column(
-      children: wordDesc.dataList.map((item) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildDescTitle(item),
-            View(
-              margin: EdgeInsets.only(top: 12),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: MyColor.backgroundColor
-              ),
-              child: TextView(item.desc, size: 16, ),
-            )
-          ]
-        )
-      )).toList()
-    ));
-  }
+  // Widget _buildCommonDesc() {
+  //   return _buidlWrapper('大家的单词笔记', Column(
+  //     children: word.wordDesc.map((item) => Padding(
+  //       padding: EdgeInsets.symmetric(vertical: 10),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: [
+  //           // _buildDescTitle(item),
+  //           View(
+  //             margin: EdgeInsets.only(top: 12),
+  //             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(4),
+  //               color: MyColor.backgroundColor
+  //             ),
+  //             child: TextView(item.desc, size: 16, ),
+  //           )
+  //         ]
+  //       )
+  //     )).toList()
+  //   ));
+  // }
 
-  Widget _buildDescTitle(DataList item) {
-    return Row(
-      children: <Widget>[
-        ImageBuild(
-          url: item.avatar,
-          width: 56,
-          height: 56,
-          borderRadius: BorderRadius.circular(4)
-        ),
-        Expanded(
-          child: View(
-            height: 56,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextView(item.userName, size: 18, color: Colors.black54,),
-                TextView(item.updateAt, color: Colors.black38,)
-              ]
-            ),
-          ),
-        ),
-        IconView(IconFont.praise, size: 18, color: Colors.black26,)
-      ],);
-  }
+  // Widget _buildDescTitle(WordDesc item) {
+  //   return Row(
+  //     children: <Widget>[
+  //       ImageBuild(
+  //         url: item.avatar,
+  //         width: 56,
+  //         height: 56,
+  //         borderRadius: BorderRadius.circular(4)
+  //       ),
+  //       Expanded(
+  //         child: View(
+  //           height: 56,
+  //           padding: EdgeInsets.symmetric(horizontal: 10),
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //             crossAxisAlignment: CrossAxisAlignment.stretch,
+  //             children: [
+  //               TextView(item.userName, size: 18, color: Colors.black54,),
+  //               TextView(item.updateAt, color: Colors.black38,)
+  //             ]
+  //           ),
+  //         ),
+  //       ),
+  //       IconView(IconFont.praise, size: 18, color: Colors.black26,)
+  //     ],);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -285,8 +294,8 @@ class _WordDetailState extends State<WordDetail> {
              _buildExample(),
              HegihtBar(),
              _buildMyWordLog(),
-             HegihtBar(),
-             _buildCommonDesc()
+            //  HegihtBar(),
+            //  _buildCommonDesc()
             // TextView(word.translate)
           ]
         ) : View(

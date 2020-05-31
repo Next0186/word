@@ -27,6 +27,10 @@ class ApiClient {
       } else {
         res = await Http.request.request(path, data: params, options: _options);
       }
+    } on DioError catch(e) {
+      var timeOut = RegExp('^Connecting timed out').hasMatch(e.error);
+      if (timeOut) Fluttertoast.showToast(msg: '网络超时');
+      return Future.error(e);
     } catch (e) {
       print(['请求异常', e]);
       Fluttertoast.showToast(msg: '请求异常');
