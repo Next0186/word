@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:word/common/icon.dart';
-import 'package:word/components/layout/color.dart';
+import 'package:word/components/layout/text_view.dart';
 // import 'package:town/common/util/util.dart';
 // import 'package:town/common/layout/color.dart';
 
@@ -12,7 +12,8 @@ class Input extends StatefulWidget {
   /// 是否自动校正
   final bool autocorrect;
   /// 占位符
-  final String placeholder;
+  final Widget placeholder;
+  final double placeholderTop;
   /// 只读
   final bool readOnly;
   final int maxLines;
@@ -49,6 +50,7 @@ class Input extends StatefulWidget {
     this.righetIcon,
     this.strutStyle,
     this.placeholder,
+    this.placeholderTop = 0.0,
     this.onSubmitted,
     this.obscureText = false,
     this.autocorrect = false,
@@ -72,7 +74,7 @@ class Input extends StatefulWidget {
 
 class _InputState extends State<Input> {
   bool _hidePlaceholder = false;
-  String get placeholder => widget.placeholder ?? '';
+  Widget get placeholder => widget.placeholder;
   TextEditingController get controller => widget.controller ?? TextEditingController();
 
   @override
@@ -104,12 +106,10 @@ class _InputState extends State<Input> {
     return Stack(
       children: [
         Positioned(
+          top: widget.placeholderTop,
           child: Padding(
             padding: EdgeInsets.only(top: widget.maxLines > 1 ? 0 : 10),
-            child: Text(
-              _hidePlaceholder ? '' : placeholder,
-              style: TextStyle(color: MyColor.textColorSecondary, fontSize: 18),
-            ),
+            child:  (!_hidePlaceholder && placeholder != null) || (controller.text == '' && placeholder != null ) ? placeholder : TextView('')
           )
         ),
         Row(

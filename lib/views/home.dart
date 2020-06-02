@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
                 ),
                 child: Input(
                   controller: _controller,
-                  placeholder: '输入要翻译的文本',
+                  placeholder: TextView('输入要翻译的文本', size: 18, color: MyColor.hintColor,),
                   righetIcon: Icon(IconFont.close),
                   righetIconOnTap: () {
                     _controller.clear();

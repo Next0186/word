@@ -1,18 +1,17 @@
-import 'dart:convert';
-
+import 'package:fbutton/fbutton.dart';
+import 'package:word/components/word.dart';
+import 'package:translator/translator.dart';
+import 'package:word/models/word_model.dart';
+import 'package:word/common/api/word_api.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:translator/translator.dart';
-import 'package:word/common/api/word_api.dart';
-import 'package:word/common/icon.dart';
-import 'package:word/components/layout/color.dart';
-import 'package:word/components/layout/height_bar.dart';
-// import 'package:word/common/api/word_list_api.dart';
-import 'package:word/components/layout/image_build.dart';
-import 'package:word/components/word.dart';
 import 'package:word/models/word_desc_model.dart';
-// import 'package:word/models/word_detail_model.dart';
-import 'package:word/models/word_model.dart';
+import 'package:word/components/layout/color.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:word/components/layout/height_bar.dart';
+import 'package:word/components/layout/image_build.dart';
+import 'package:word/components/word_detail/category.dart';
 
 class WordDetail extends StatefulWidget {
   final String word;
@@ -24,12 +23,16 @@ class WordDetail extends StatefulWidget {
 
 class _WordDetailState extends State<WordDetail> {
   WordModel word;
+  WordDesc changeItem;
   WordDescModel wordDesc;
+  bool editingLog = false;
   final translator = GoogleTranslator();
-  // WordDetailModel detail ;
   AudioPlayer audioPlayer = AudioPlayer();
+  FocusNode textFocusNode = FocusNode();
+  TextEditingController _logController = TextEditingController();
 
   var padding = EdgeInsets.symmetric(horizontal: 15, vertical: 10);
+
 
 
   @override
@@ -46,7 +49,7 @@ class _WordDetailState extends State<WordDetail> {
         word = WordModel.fromJson(data['data']);
       });
     } catch (e) {
-      print(['object111111111111', e]);
+      print(['获取单词信息失败', e]);
     }
   }
 
@@ -55,13 +58,6 @@ class _WordDetailState extends State<WordDetail> {
     audioPlayer.dispose();
     super.deactivate();
   }
-
-  // void translate() async {
-  //   final res = await wordListApi.findWord(widget.item.word);
-  //   setState(() {
-  //     detail = WordDetailModel.fromJson(res['data']);
-  //   });
-  // }
 
   Widget _buildPronunciation() {
     const outline = Icon(Icons.play_circle_outline, color: Colors.redAccent, size: 20);
@@ -110,8 +106,33 @@ class _WordDetailState extends State<WordDetail> {
     );
   }
 
+  _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CategoryDialog(
+          widget.word,
+          callBack: () {
+            getWord();
+          },
+        );
+      }
+    );
+  }
+  _unStar() async {
+    var categoryId = word.starList[0].sId;
+    try {
+      await wordApi.removeCollectWord(widget.word, categoryId);
+      Fluttertoast.showToast(msg: '已取消收藏');
+      word.starList = [];
+      setState(() => word = word);
+    } catch (e) {
+      print(['取消收藏失败', e]);
+    }
+  }
   // 发音图片
   Widget _buildWordText() {
+    var star = word.starList.length > 0;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Row(
@@ -119,7 +140,11 @@ class _WordDetailState extends State<WordDetail> {
           Expanded(
             child: TextView(word.word, size: 26,),
           ),
-          IconView(word.starList.length > 0 ? Icons.star : Icons.star_border, color: Colors.redAccent,)
+          IconView(
+            star ? Icons.star : Icons.star_border,
+            color: Colors.redAccent,
+            onTap: star? _unStar : _showDialog,
+          )
         ],
       ),
     );
@@ -193,117 +218,213 @@ class _WordDetailState extends State<WordDetail> {
     ));
   }
 
-  Widget _buildMyWordLog() {
-    var desc = word?.wordDesc;
-    return _buidlWrapper('我的单词笔记：', Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: desc != null ? desc.map((item) => View(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          color: MyColor.backgroundColor
-        ),
-        child: TextView(item.desc, size: 16, color: Colors.black45,)
-      )).toList() : []
-      // <Widget>[
-      //   View(
-      //     margin: EdgeInsets.symmetric(vertical: 8),
-      //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      //     decoration: BoxDecoration(
-      //       borderRadius: BorderRadius.circular(4),
-      //       color: MyColor.backgroundColor
-      //     ),
-      //     child: TextView(wordDesc.myDesc.desc, size: 16, color: Colors.black45,)
-      //   )
-      // ] : [],
-    ));
+  addLog() {
+    if(changeItem != null) {
+      updateLog();
+    } else if (editingLog) { pushDesc(); }
+    setState(() {
+      editingLog = !editingLog;
+    });
   }
 
-  // Widget _buildCommonDesc() {
-  //   return _buidlWrapper('大家的单词笔记', Column(
-  //     children: word.wordDesc.map((item) => Padding(
-  //       padding: EdgeInsets.symmetric(vertical: 10),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.stretch,
-  //         children: [
-  //           // _buildDescTitle(item),
-  //           View(
-  //             margin: EdgeInsets.only(top: 12),
-  //             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(4),
-  //               color: MyColor.backgroundColor
-  //             ),
-  //             child: TextView(item.desc, size: 16, ),
-  //           )
-  //         ]
-  //       )
-  //     )).toList()
-  //   ));
-  // }
+  updateLog() async {
+    var id = changeItem.sId;
+    var text = _logController.text;
+    try {
+      await wordApi.updateWordDesc(id, text);
+      word.wordDesc.forEach((element) {
+        if (element.sId == changeItem.sId) {
+          element.desc = text;
+        }
+      });
+      setState(() {
+        word = word;
+        editingLog = false;
+      });
+      Fluttertoast.showToast(msg: '更新成功');
+      changeItem = null;
+      _logController.text = '';
+    } catch (e) {
+    }
+  }
 
-  // Widget _buildDescTitle(WordDesc item) {
-  //   return Row(
-  //     children: <Widget>[
-  //       ImageBuild(
-  //         url: item.avatar,
-  //         width: 56,
-  //         height: 56,
-  //         borderRadius: BorderRadius.circular(4)
-  //       ),
-  //       Expanded(
-  //         child: View(
-  //           height: 56,
-  //           padding: EdgeInsets.symmetric(horizontal: 10),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //             crossAxisAlignment: CrossAxisAlignment.stretch,
-  //             children: [
-  //               TextView(item.userName, size: 18, color: Colors.black54,),
-  //               TextView(item.updateAt, color: Colors.black38,)
-  //             ]
-  //           ),
-  //         ),
-  //       ),
-  //       IconView(IconFont.praise, size: 18, color: Colors.black26,)
-  //     ],);
-  // }
+  pushDesc() async {
+    String desc = _logController.text;
+    if (desc == '' || desc == null) return;
+    try {
+      var res = await wordApi.addWordDesc(widget.word, desc);
+      _logController.text = '';
+      word.wordDesc.add(WordDesc.fromJson(res['data']));
+      setState(() {word = word;});
+      print(['object', res]);
+    } catch (e) {
+      print(['error', e]);
+    }
+  }
+
+  Widget _buildMyWordLog() {
+    var desc = word?.wordDesc ?? [];
+    final List<Widget> children = [];
+    for (var i = 0; i < desc.length; i++) {
+      var item = desc[i];
+      children.add(Slidable(
+        actionExtentRatio: 0.25,
+        actionPane: SlidableDrawerActionPane(),
+        child: View(
+          alignment: Alignment.topLeft,
+          margin: EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: MyColor.backgroundColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: TextView('${i+1}、${item.desc}', size: 16, color: Colors.black45,)
+        ),
+        secondaryActions: <Widget>[
+          IconSlideAction(
+            caption: '编辑',
+            icon: Icons.edit,
+            color: Colors.black45,
+            onTap:(){ editItem(item); },
+          ),
+          IconSlideAction(
+            caption: '删除',
+            color: Colors.red,
+            icon: Icons.delete,
+            onTap: () { deleteDescItem(item); },
+          ),
+        ],
+      ));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children
+    );
+  }
+
+  Future<void> editItem(WordDesc item) async {
+    changeItem = item;
+    setState(() {
+      editingLog = true;
+    });
+    FocusScope.of(context).requestFocus(textFocusNode);
+    _logController.text = item.desc;
+  }
+
+  void deleteDescItem(WordDesc item) async {
+    FocusScope.of(context).requestFocus(textFocusNode);
+    try {
+      var res = await wordApi.deleteWordDesc(item.sId);
+      word.wordDesc.remove(item);
+      setState(() { word = word; });
+      print(['object', res]);
+    } catch (e) {
+      print(['delete', e]);
+    }
+    print(['object', 'delete']);
+  }
+
+  Widget _buildLogEdit() {
+    return View(
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.symmetric(horizontal: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        color: MyColor.backgroundColor
+      ),
+      child:TextField(
+        minLines: 1,
+        maxLines: 6,
+        focusNode: textFocusNode,
+        decoration: InputDecoration(
+          hintText: '请输入内容'
+        ),
+        controller: _logController,
+      )
+    );
+  }
+
+  Widget _buildPanel() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        View(
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(width: 0.5, color: MyColor.borderColor))
+          ),
+          child: TextView('单词笔记',size: 20,),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildMyWordLog(),
+                editingLog ? _buildLogEdit() : View(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: FButton(
+                    effect: true,
+                    text: editingLog ? '保存': '添加笔记',
+                    textColor: Colors.white,
+                    color: Color(0xffffc900),
+                    onPressed: addLog,
+                    clickEffect: true,
+                    disabledColor: Color(0x66ffc900),
+                    corner: FButtonCorner.all(9),
+                    splashColor: Color(0xffff7043),
+                    highlightColor: Color(0xffE65100).withOpacity(0.20),
+                    hoverColor: Colors.redAccent.withOpacity(0.16),
+                  ),
+                )
+              ]
+            )
+          ),
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    BorderRadiusGeometry radius = BorderRadius.only(
+      topLeft: Radius.circular(24.0),
+      topRight: Radius.circular(24.0),
+    );
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        title: TextView('单词详情')
-      ),
-      body: word != null ? SingleChildScrollView(
-        child: word.sId != null ? Column(
-          children: [
-            _buildWordText(),
-            _buildPronunciation(),
-            Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: HegihtBar(),
+      body: SlidingUpPanel(
+        borderRadius: radius,
+        panel: _buildPanel(),
+        body: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            centerTitle: true,
+            brightness: Brightness.light,
+          ),
+          body: word != null ? SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 100),
+            child: word.sId != null ? Column(
+              children: [
+                _buildWordText(),
+                _buildPronunciation(),
+                Padding(padding: EdgeInsets.only(top: 10),child: HegihtBar(),),
+                _buildTranslate(),
+                HegihtBar(),
+                _buildOrigin(),
+                HegihtBar(),
+                _buildExample(),
+              ]
+            ) : View(
+              child: TextView('没有相关单词'),
             ),
-             _buildTranslate(),
-             HegihtBar(),
-             _buildOrigin(),
-             HegihtBar(),
-             _buildExample(),
-             HegihtBar(),
-             _buildMyWordLog(),
-            //  HegihtBar(),
-            //  _buildCommonDesc()
-            // TextView(word.translate)
-          ]
-        ) : View(
-          child: TextView('没有相关单词'),
+          ) : View(
+            alignment: Alignment.center,
+            child: TextView('查找中请稍等'),
+          )
         ),
-      ) : View(
-        alignment: Alignment.center,
-        child: TextView('查找中请稍等'),
       )
     );
   }

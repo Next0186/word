@@ -28,6 +28,8 @@ dependencies:
   provider: ^4.1.2 # 状态管理
   translator: ^0.1.4 # 翻译
   getflutter: ^1.0.11
+  flutter_slidable: ^0.5.4 # 侧滑删除
+  sliding_up_panel: ^1.0.2 # 上滑弹窗
   fluttertoast: ^4.0.1 # toast
   audioplayers: ^0.15.1 # 播放音频
   shared_preferences: ^0.5.7+2 # 数据持久化

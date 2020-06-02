@@ -15,10 +15,6 @@ class ApiClient {
       _options.headers['token'] = Store.getValue<UserInfoStore>().userInfo.token;
     }
 
-    if (RegExp('^/api/refresh/token').hasMatch(path)) {
-      print(['object', path]);
-    }
-
     try {
       if (params == null && options == null) {
         res = await Http.request.get(path, options: _options);
