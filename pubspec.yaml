@@ -32,6 +32,7 @@ dependencies:
   sliding_up_panel: ^1.0.2 # 上滑弹窗
   fluttertoast: ^4.0.1 # toast
   audioplayers: ^0.15.1 # 播放音频
+  webview_flutter: ^0.3.22+1 # webview
   shared_preferences: ^0.5.7+2 # 数据持久化
   cached_network_image: ^2.2.0+1 # 图片缓存
 

@@ -26,6 +26,7 @@ class _WordDetailState extends State<WordDetail> {
   WordDesc changeItem;
   WordDescModel wordDesc;
   bool editingLog = false;
+  var brightness = Brightness.dark;
   final translator = GoogleTranslator();
   AudioPlayer audioPlayer = AudioPlayer();
   FocusNode textFocusNode = FocusNode();
@@ -95,7 +96,7 @@ class _WordDetailState extends State<WordDetail> {
               ]
             )
           ),
-          word.wordImage[0] != null ? ImageBuild(
+          word.wordImage.isNotEmpty ? ImageBuild(
             url: word.wordImage[0],
             width: 80,
             height: 80,
@@ -205,6 +206,33 @@ class _WordDetailState extends State<WordDetail> {
           )
         ]
       )).toList()
+    ));
+  }
+
+  Widget _buildOriginEn() {
+    return _buidlWrapper('词源（英文）', View(
+      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: widget.word,
+              style: TextStyle(
+                fontSize: 22,
+                color: MyColor.linkColor,
+                decoration:TextDecoration.underline,
+              ),
+            ),
+            TextSpan(
+              text: ' （需要翻墙）',
+              style: TextStyle(color: MyColor.textColorSecondary)
+            )
+          ])
+      ),
+      onTap: () {
+        // Navigator.pushNamed(context, 'webView', arguments: 'https://www.baidu.com');
+        Navigator.pushNamed(context, 'webView', arguments: 'https://www.etymonline.com/search?q=${widget.word}');
+      },
     ));
   }
 
@@ -388,24 +416,34 @@ class _WordDetailState extends State<WordDetail> {
     );
   }
 
+  Future<bool> _requestPop() {
+    setState(() {
+      brightness = Brightness.light;
+    });
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(24.0),
       topRight: Radius.circular(24.0),
     );
-    return Scaffold(
-      body: SlidingUpPanel(
-        borderRadius: radius,
-        panel: _buildPanel(),
-        body: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            centerTitle: true,
-            brightness: Brightness.light,
-          ),
+    return WillPopScope(
+      onWillPop: _requestPop,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: TextView('单词详情', color: Colors.white,),
+          brightness: brightness,
+        ),
+        body: SlidingUpPanel(
+          borderRadius: radius,
+          panel: _buildPanel(),
           body: word != null ? SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 100),
+            padding: EdgeInsets.only(bottom: 200),
             child: word.sId != null ? Column(
               children: [
                 _buildWordText(),
@@ -415,6 +453,8 @@ class _WordDetailState extends State<WordDetail> {
                 HegihtBar(),
                 _buildOrigin(),
                 HegihtBar(),
+                _buildOriginEn(),
+                HegihtBar(),
                 _buildExample(),
               ]
             ) : View(
@@ -423,9 +463,9 @@ class _WordDetailState extends State<WordDetail> {
           ) : View(
             alignment: Alignment.center,
             child: TextView('查找中请稍等'),
-          )
-        ),
-      )
+          ),
+        )
+      ),
     );
   }
 }

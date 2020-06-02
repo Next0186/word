@@ -5,6 +5,7 @@ import 'package:word/views/home_page.dart';
 import 'package:word/views/login.dart';
 import 'package:word/views/retrieve.dart';
 import 'package:word/views/signup.dart';
+import 'package:word/views/web_view.dart';
 import 'package:word/views/word_detail.dart';
 
 final Map<String, WidgetBuilder> routesConfig = {
@@ -29,6 +30,12 @@ final Map<String, WidgetBuilder> routesConfig = {
   'retrieve': (context) {
     final String title = ModalRoute.of(context).settings.arguments;
     return Retrieve(title: title);
+  },
+
+  /// webview
+  'webView': (context) {
+    final String url = ModalRoute.of(context).settings.arguments;
+    return WebViewPage(url);
   },
 
   // // 注册
