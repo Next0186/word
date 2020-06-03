@@ -416,56 +416,40 @@ class _WordDetailState extends State<WordDetail> {
     );
   }
 
-  Future<bool> _requestPop() {
-    setState(() {
-      brightness = Brightness.light;
-    });
-    return Future.value(true);
-  }
-
   @override
   Widget build(BuildContext context) {
     BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(24.0),
       topRight: Radius.circular(24.0),
     );
-    return WillPopScope(
-      onWillPop: _requestPop,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.white),
-          title: TextView('单词详情', color: Colors.white,),
-          brightness: brightness,
-        ),
-        body: SlidingUpPanel(
-          borderRadius: radius,
-          panel: _buildPanel(),
-          body: word != null ? SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 200),
-            child: word.sId != null ? Column(
-              children: [
-                _buildWordText(),
-                _buildPronunciation(),
-                Padding(padding: EdgeInsets.only(top: 10),child: HegihtBar(),),
-                _buildTranslate(),
-                HegihtBar(),
-                _buildOrigin(),
-                HegihtBar(),
-                _buildOriginEn(),
-                HegihtBar(),
-                _buildExample(),
-              ]
-            ) : View(
-              child: TextView('没有相关单词'),
-            ),
+    return PageLayout(
+      title: '单词详情',
+      body: SlidingUpPanel(
+        borderRadius: radius,
+        panel: _buildPanel(),
+        body: word != null ? SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 200),
+          child: word.sId != null ? Column(
+            children: [
+              _buildWordText(),
+              _buildPronunciation(),
+              Padding(padding: EdgeInsets.only(top: 10),child: HegihtBar(),),
+              _buildTranslate(),
+              HegihtBar(),
+              _buildOrigin(),
+              HegihtBar(),
+              _buildOriginEn(),
+              HegihtBar(),
+              _buildExample(),
+            ]
           ) : View(
-            alignment: Alignment.center,
-            child: TextView('查找中请稍等'),
+            child: TextView('没有相关单词'),
           ),
-        )
-      ),
+        ) : View(
+          alignment: Alignment.center,
+          child: TextView('查找中请稍等'),
+        ),
+      )
     );
   }
 }

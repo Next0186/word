@@ -76,8 +76,14 @@ class _HomeState extends State<Home> {
     // final word = cont
     text = text.trim();
     if (text.isEmpty) return;
+    if (RegExp(r"^.+\s+.+$").hasMatch(text)) {
+      // 句子
+      NavKey.navKey.currentState.pushNamed('sentences', arguments: text);
+    } else {
+      // 单词
+      NavKey.navKey.currentState.pushNamed('wordDetail', arguments: text);
+    }
     // Navigator.popAndPushNamed(NavKey.navKey.currentContext, 'routeName');
-    NavKey.navKey.currentState.pushNamed('wordDetail', arguments: text);
     // try {
     //   Navigator.pushNamed(NavKey.navKey.currentContext, 'wordDetail', arguments: text);
     // } catch (e) {

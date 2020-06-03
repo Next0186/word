@@ -36,6 +36,17 @@ class WordApi extends ApiClient {
   Future removeCollectWord(String word, String categoryId) {
     return request('/auth/remove/collect', {'word': word, 'categoryId': categoryId}, Options(method: 'DELETE'));
   }
+
+  /// 添加句子
+  Future addSentences(String sentence, List<String> words) {
+    return request('/auth/sentence', {'sentence': sentence, 'words': words});
+  }
+
+  /// 查找句子的单词
+  Future findWords(List<String> words) {
+    return request('/auth/find/words', {'words': words});
+  }
+
   
 }
 final wordApi = WordApi();

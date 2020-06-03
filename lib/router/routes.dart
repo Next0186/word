@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:word/views/home_page.dart';
 import 'package:word/views/login.dart';
 import 'package:word/views/retrieve.dart';
+import 'package:word/views/sentences.dart';
 import 'package:word/views/signup.dart';
 import 'package:word/views/web_view.dart';
 import 'package:word/views/word_detail.dart';
@@ -38,10 +39,11 @@ final Map<String, WidgetBuilder> routesConfig = {
     return WebViewPage(url);
   },
 
-  // // 注册
-  // 'register': (context) {
-  //   return LoginTemp(mode: LoginTempMode.register);
-  // }
+  // 句子页面
+  'sentences': (context) {
+    String sentences = ModalRoute.of(context).settings.arguments;
+    return Sentences(sentences);
+  }
 
 };
 
