@@ -4,9 +4,15 @@ class UserInfoModel {
   String email;
   String avatar;
   List<Category> category;
+  List<SentenceGroup> sentenceGroup;
 
   UserInfoModel(
-      {this.token, this.rfToken, this.email, this.avatar, this.category});
+      {this.token,
+      this.rfToken,
+      this.email,
+      this.avatar,
+      this.category,
+      this.sentenceGroup});
 
   UserInfoModel.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -19,6 +25,12 @@ class UserInfoModel {
         category.add(new Category.fromJson(v));
       });
     }
+    if (json['sentenceGroup'] != null) {
+      sentenceGroup = new List<SentenceGroup>();
+      json['sentenceGroup'].forEach((v) {
+        sentenceGroup.add(new SentenceGroup.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +41,10 @@ class UserInfoModel {
     data['avatar'] = this.avatar;
     if (this.category != null) {
       data['category'] = this.category.map((v) => v.toJson()).toList();
+    }
+    if (this.sentenceGroup != null) {
+      data['sentenceGroup'] =
+          this.sentenceGroup.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -100,6 +116,43 @@ class Words {
     data['_id'] = this.sId;
     data['wordId'] = this.wordId;
     data['word'] = this.word;
+    return data;
+  }
+}
+
+class SentenceGroup {
+  String sId;
+  String userId;
+  String title;
+  String subTitle;
+  String createdAt;
+  String updateAt;
+
+  SentenceGroup(
+      {this.sId,
+      this.userId,
+      this.title,
+      this.subTitle,
+      this.createdAt,
+      this.updateAt});
+
+  SentenceGroup.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    userId = json['userId'];
+    title = json['title'];
+    subTitle = json['subTitle'];
+    createdAt = json['createdAt'];
+    updateAt = json['updateAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['userId'] = this.userId;
+    data['title'] = this.title;
+    data['subTitle'] = this.subTitle;
+    data['createdAt'] = this.createdAt;
+    data['updateAt'] = this.updateAt;
     return data;
   }
 }

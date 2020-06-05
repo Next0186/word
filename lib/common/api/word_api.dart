@@ -43,8 +43,8 @@ class WordApi extends ApiClient {
   }
 
   /// 查找句子的单词
-  Future findWords(List<String> words) {
-    return request('/auth/find/words', {'words': words});
+  Future findWords(String sentence, List<String> words) {
+    return request('/auth/find/words', {'sentence': sentence, 'words': words});
   }
 
   

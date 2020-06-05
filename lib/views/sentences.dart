@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:translator/translator.dart';
 import 'package:word/common/api/word_api.dart';
 import 'package:word/components/word.dart';
+import 'package:word/models/sentence_model.dart';
 
 class Sentences extends StatefulWidget {
   final String sentences;
@@ -12,12 +14,23 @@ class Sentences extends StatefulWidget {
 }
 
 class _SentencesState extends State<Sentences> {
+  String wordTranslate;
+  SentenceModel sentence;
+
   String get sentences => widget.sentences;
+  bool get star => sentence?.star != null ?? true;
 
   @override
   void initState() {
     super.initState();
     getWord();
+    translate();
+  }
+
+  void translate() async {
+    final translator = new GoogleTranslator();
+    final res = await translator.translate(sentences, from: 'en', to: 'zh-cn');
+    setState(() => wordTranslate = res);
   }
 
   void getWord() {
@@ -33,11 +46,19 @@ class _SentencesState extends State<Sentences> {
 
   getData(List<String> wordList) async {
     try {
-      var res = await wordApi.findWords(wordList);
-      print(['object', json.encode(res)]);
+      var res = await wordApi.findWords(sentences, wordList);
+      setState(() => sentence = SentenceModel.fromJson(res));
     } catch (e) {
       print(['添加句子失败', e]);
     }
+  }
+
+  _unStar() {
+    print(['object', 'unstart']);
+  }
+
+  _showDialog() {
+    print(['object', '_showDialog']);
   }
 
   @override
@@ -51,9 +72,19 @@ class _SentencesState extends State<Sentences> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: TextView(sentences, size: 20,),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextView(sentences, size: 20,),
+                      TextView('翻译：${wordTranslate?? ''}', )
+                    ]
+                  ),
                 ),
-                
+                IconView(
+                  star ? Icons.star : Icons.star_border,
+                  color: Colors.redAccent,
+                  onTap: star? _unStar : _showDialog,
+                )
               ],
             )
           ]
