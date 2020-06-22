@@ -1,8 +1,8 @@
 import 'package:word/common/icon.dart';
 import 'package:word/components/word.dart';
+import 'package:word/views/collect_list.dart';
 import 'package:word/views/home.dart';
 import 'package:word/views/mine.dart';
-import 'package:word/views/word_list.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
       activeIcon: Icon(IconFont.activity_circle)
     ),
     BottomNavigationBarItem(
-      title: Text('广场'),
+      title: Text('收藏'),
       icon: Icon(IconFont.activity_circle),
       activeIcon: Icon(IconFont.activity_circle)
     ),
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: IndexedStack(index: pageIndex, children: [
         Home(),
-        WordList(),
+        CollectList(),
         Mine()
       ])
     );
