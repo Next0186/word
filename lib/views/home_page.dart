@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:word/common/icon.dart';
 import 'package:word/components/word.dart';
 import 'package:word/views/collect_list.dart';
@@ -41,6 +44,17 @@ class _HomePageState extends State<HomePage> {
         currentIndex: pageIndex,
         items: bottomTabs,
         onTap: (index){
+          print(['object', Platform.isAndroid && index == 1]);
+          if (index != 1) {
+            SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.dark
+            );
+            SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+            // SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+            //   statusBarIconBrightness: Brightness.light
+            // );
+            // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+          }
           setState(() {
             pageIndex = index;
           });

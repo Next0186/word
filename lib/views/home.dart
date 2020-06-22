@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       // appBar: AppBar(
       //   centerTitle: true,
-      //   title: TextView('单词列表'),
+      //   title: TextView('单词查询'),
       // ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(

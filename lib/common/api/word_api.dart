@@ -57,6 +57,12 @@ class WordApi extends ApiClient {
     return request('/auth/delete/sentence?id=$id', null, Options(method: 'DELETE'));
   }
 
+  /// 获取分类列表
+  Future getCategoryList() {
+    // return request('​/auth/translate?word=word');
+    return request('​/auth/get/category/list');
+  }
+
   
 }
 final wordApi = WordApi();

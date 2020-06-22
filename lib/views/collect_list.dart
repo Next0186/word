@@ -1,4 +1,6 @@
 import 'package:word/components/word.dart';
+import 'package:word/views/sentences_list.dart';
+import 'package:word/views/word_list.dart';
 
 class CollectList extends StatefulWidget {
   CollectList({Key key}) : super(key: key);
@@ -21,12 +23,13 @@ class _CollectListState extends State<CollectList> with SingleTickerProviderStat
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: TextView('收藏列表'),
+        title: TextView('收藏列表', color: Colors.white,),
+        brightness: Brightness.dark,
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
-            Tab(text: '单词'),
-            Tab(text: '句子')
+            Tab(child: TextView('单词', size: 16, color: Colors.white),),
+            Tab(child: TextView('句子', size: 16, color: Colors.white),)
           ]
         ),
       ),
@@ -34,7 +37,8 @@ class _CollectListState extends State<CollectList> with SingleTickerProviderStat
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-
+          WordList(),
+          SentencesList()
         ],
       ),
     );
