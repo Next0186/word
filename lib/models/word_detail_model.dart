@@ -2,12 +2,13 @@
 class WordDetailModel {
   String id;
   String word;
-  String translate;
+  List<String> translate;
   Pronounce pronounce;
-  List<String> additional;
+  String additional;
   String wordAudio;
   List<String> wordImage;
-  String origin;
+  // String origin;
+  List<Origins> origins;
   String originEn;
   bool notFind;
   String rank;
@@ -21,7 +22,7 @@ class WordDetailModel {
       this.additional,
       this.wordAudio,
       this.wordImage,
-      this.origin,
+      this.origins,
       this.originEn,
       this.notFind,
       this.rank,
@@ -32,14 +33,22 @@ class WordDetailModel {
   WordDetailModel.fromJson(Map<String, dynamic> json) {
     word = json['word'];
     id = json['_id'];
-    translate = json['translate'];
+    // translate = json['translate'];
+    translate = json['translate'].cast<String>();
     pronounce = json['pronounce'] != null
         ? new Pronounce.fromJson(json['pronounce'])
         : null;
-    additional = json['additional'].cast<String>();
+    additional = json['additional'];
     wordAudio = json['wordAudio'];
     wordImage = json['wordImage'].cast<String>();
-    origin = json['origin'];
+    if (json['origins'] != null) {
+      origins = new List<Origins>();
+      json['origins'].forEach((v) {
+        origins.add(new Origins.fromJson(v));
+      });
+    }
+    // origin = json['origin'];
+    
     originEn = json['originEn'];
     notFind = json['notFind'];
     rank = json['rank'];
@@ -58,13 +67,17 @@ class WordDetailModel {
     data['word'] = this.word;
     data['_id'] = this.id;
     data['translate'] = this.translate;
+    // data['translate'] = this.translate;
     if (this.pronounce != null) {
       data['pronounce'] = this.pronounce.toJson();
     }
     data['additional'] = this.additional;
     data['wordAudio'] = this.wordAudio;
     data['wordImage'] = this.wordImage;
-    data['origin'] = this.origin;
+    // data['origin'] = this.origin;
+    if (this.origins != null) {
+      data['origins'] = this.origins.map((v) => v.toJson()).toList();
+    }
     data['originEn'] = this.originEn;
     data['notFind'] = this.notFind;
     data['rank'] = this.rank;
@@ -137,6 +150,28 @@ class Comments {
     data['avatar'] = this.avatar;
     data['comment'] = this.comment;
     data['createTime'] = this.createTime;
+    return data;
+  }
+}
+
+class Origins {
+  String sId;
+  String title;
+  String origin;
+
+  Origins({this.sId, this.title, this.origin});
+
+  Origins.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    title = json['title'];
+    origin = json['origin'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['title'] = this.title;
+    data['origin'] = this.origin;
     return data;
   }
 }
