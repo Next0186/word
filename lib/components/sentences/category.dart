@@ -47,7 +47,6 @@ class _CategoryDialogState extends State<SentencesCategoryDialog> {
                 activeColor: MyColor.primaryColor,
                 subtitle: item.subTitle.isNotEmpty ? TextView(item.subTitle) : null,
                 onChanged: (value) {
-                  print(['object', acItem, value.sId]);
                   setState(() => acItem = value);
                 },
               );

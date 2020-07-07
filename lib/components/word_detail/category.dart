@@ -4,6 +4,7 @@ import 'package:word/components/layout/color.dart';
 import 'package:word/components/word.dart';
 import 'package:word/models/user_info_model.dart';
 import 'package:word/store/module/user_info_store.dart';
+import 'package:word/store/module/word_list_store.dart';
 import 'package:word/store/provider.dart';
 
 class CategoryDialog extends StatefulWidget {
@@ -21,7 +22,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    var _category = Store.value<UserInfoStore>(context).userInfo?.category;
+    var _category = Store.value<WordListStore>(context).category;
     setState(() {
       category = _category;
       acItem = _category[0];

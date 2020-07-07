@@ -59,8 +59,7 @@ class WordApi extends ApiClient {
 
   /// 获取分类列表
   Future getCategoryList() {
-    // return request('​/auth/translate?word=word');
-    return request('​/auth/get/category/list');
+    return request('/auth/get/category/list');
   }
 
   

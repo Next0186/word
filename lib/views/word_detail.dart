@@ -284,7 +284,6 @@ class _WordDetailState extends State<WordDetail> {
       _logController.text = '';
       word.wordDesc.add(WordDesc.fromJson(res['data']));
       setState(() {word = word;});
-      print(['object', res]);
     } catch (e) {
       print(['error', e]);
     }
@@ -342,14 +341,12 @@ class _WordDetailState extends State<WordDetail> {
   void deleteDescItem(WordDesc item) async {
     FocusScope.of(context).requestFocus(textFocusNode);
     try {
-      var res = await wordApi.deleteWordDesc(item.sId);
+      await wordApi.deleteWordDesc(item.sId);
       word.wordDesc.remove(item);
       setState(() { word = word; });
-      print(['object', res]);
     } catch (e) {
       print(['delete', e]);
     }
-    print(['object', 'delete']);
   }
 
   Widget _buildLogEdit() {

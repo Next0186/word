@@ -3,7 +3,7 @@ class UserInfoModel {
   String rfToken;
   String email;
   String avatar;
-  List<Category> category;
+  // List<Category> category;
   List<SentenceGroup> sentenceGroup;
 
   UserInfoModel(
@@ -11,7 +11,7 @@ class UserInfoModel {
       this.rfToken,
       this.email,
       this.avatar,
-      this.category,
+      // this.category,
       this.sentenceGroup});
 
   UserInfoModel.fromJson(Map<String, dynamic> json) {
@@ -19,12 +19,12 @@ class UserInfoModel {
     rfToken = json['rfToken'];
     email = json['email'];
     avatar = json['avatar'];
-    if (json['category'] != null) {
-      category = new List<Category>();
-      json['category'].forEach((v) {
-        category.add(new Category.fromJson(v));
-      });
-    }
+    // if (json['category'] != null) {
+    //   category = new List<Category>();
+    //   json['category'].forEach((v) {
+    //     category.add(new Category.fromJson(v));
+    //   });
+    // }
     if (json['sentenceGroup'] != null) {
       sentenceGroup = new List<SentenceGroup>();
       json['sentenceGroup'].forEach((v) {
@@ -39,9 +39,9 @@ class UserInfoModel {
     data['rfToken'] = this.rfToken;
     data['email'] = this.email;
     data['avatar'] = this.avatar;
-    if (this.category != null) {
-      data['category'] = this.category.map((v) => v.toJson()).toList();
-    }
+    // if (this.category != null) {
+    //   data['category'] = this.category.map((v) => v.toJson()).toList();
+    // }
     if (this.sentenceGroup != null) {
       data['sentenceGroup'] =
           this.sentenceGroup.map((v) => v.toJson()).toList();

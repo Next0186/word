@@ -42,11 +42,5 @@ class _CollectListState extends State<CollectList> with SingleTickerProviderStat
         ],
       ),
     );
-    // return PageLayout(
-    //   title: '收藏列表',
-    //   body: Container(
-    //     child: TextView('11111111111'),
-    //   ),
-    // );
   }
 }

@@ -82,7 +82,6 @@ class _InputState extends State<Input> {
     super.initState();
     controller.addListener(() {
       onChanged();
-      print(['object', 'object']);
     });
   }
 

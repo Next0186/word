@@ -81,7 +81,6 @@ class _SentencesState extends State<Sentences> {
   }
 
   _unStar() async {
-    // /auth/delete/sentence
     try {
       await wordApi.deleteCollectSentences(sentence.star.sId);
       getData();
