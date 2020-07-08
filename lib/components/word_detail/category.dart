@@ -1,11 +1,10 @@
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:word/common/api/word_api.dart';
-import 'package:word/components/layout/color.dart';
 import 'package:word/components/word.dart';
-import 'package:word/models/user_info_model.dart';
-import 'package:word/store/module/user_info_store.dart';
-import 'package:word/store/module/word_list_store.dart';
+import 'package:word/common/api/word_api.dart';
 import 'package:word/store/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:word/models/user_info_model.dart';
+import 'package:word/components/layout/color.dart';
+import 'package:word/store/module/word_list_store.dart';
 
 class CategoryDialog extends StatefulWidget {
   final String word;
@@ -56,6 +55,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
         ),
       ),
       actions: [
+        FlatButton(child: Text("取消"), onPressed: () => Navigator.of(context).pop()),
         FlatButton(child: Text("确定"), onPressed: () async {
           try {
             await wordApi.collectWord(acItem.sId, widget.word);
@@ -66,7 +66,6 @@ class _CategoryDialogState extends State<CategoryDialog> {
             print(['收藏失败', e]);
           }
         }),
-        FlatButton(child: Text("取消"), onPressed: () => Navigator.of(context).pop())
       ]
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:word/views/home.dart';
 import 'package:flutter/material.dart';
@@ -52,5 +53,5 @@ Route routeGenerator(RouteSettings settings) {
   String routerName = settings.name;
   WidgetBuilder builder = routesConfig[routerName];
 
-  return MaterialPageRoute(builder: builder, settings: settings);
+  return CupertinoPageRoute(builder: builder, settings: settings);
 }
