@@ -1,6 +1,6 @@
 import 'package:word/components/word.dart';
 import 'package:word/views/sentences_list.dart';
-import 'package:word/views/word_list.dart';
+import 'package:word/views/category_list.dart';
 
 class CollectList extends StatefulWidget {
   CollectList({Key key}) : super(key: key);
@@ -37,7 +37,7 @@ class _CollectListState extends State<CollectList> with SingleTickerProviderStat
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          WordList(),
+          CategoryList(),
           SentencesList()
         ],
       ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:date_time_format/date_time_format.dart';
+import 'package:word/common/api/word_list_api.dart';
 import 'package:word/common/icon.dart';
 import 'package:word/components/word_detail/add_category.dart';
 import 'package:word/store/provider.dart';
@@ -8,14 +9,14 @@ import 'package:word/common/api/word_api.dart';
 import 'package:word/components/layout/color.dart';
 import 'package:word/store/module/word_list_store.dart';
 
-class WordList extends StatefulWidget {
-  WordList({Key key}) : super(key: key);
+class CategoryList extends StatefulWidget {
+  CategoryList({Key key}) : super(key: key);
 
   @override
   _WordListState createState() => _WordListState();
 }
 
-class _WordListState extends State<WordList> {
+class _WordListState extends State<CategoryList> {
 
   @override
   void initState() {
@@ -37,10 +38,16 @@ class _WordListState extends State<WordList> {
       context: context,
       builder: (BuildContext context) {
         return AddCategory(
-          // widget.word,
-          // callBack: () {
-          //   getWord();
-          // },
+          submit: (name, description) async {
+            try {
+              var res = await wordListApi.createCategory(name, description);
+              Navigator.pop(context);
+              getDate();
+              print(['object', res]);
+            } catch (e) {
+              print(['object', e]);
+            }
+          }
         );
       }
     );
@@ -76,7 +83,7 @@ class _WordListState extends State<WordList> {
                     Row(
                       children: [
                         Expanded(child: TextView(item.title, size: 16, weight: FontWeight.w500,),),
-                        TextView(updateTime, color: MyColor.textColorSecondary,),
+                        TextView(updateTime, color: MyColor.textColorSecondary, size: 12,),
                       ]
                     ),
                     SizedBox(height: 2,),

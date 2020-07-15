@@ -12,6 +12,11 @@ class WordListApi extends ApiClient {
   Future findWord(String word) {
     return request('/auth/translate?word=$word');
   }
+
+  /// 查找单个单词
+  Future createCategory(String name, String description) {
+    return request('/auth/create/category', { 'subTitle': description, 'title': name });
+  }
 }
 
 final wordListApi = WordListApi();
